@@ -1,3 +1,5 @@
+package telegram.v1
+
 def send(String message) {
     def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
