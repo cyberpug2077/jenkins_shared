@@ -13,3 +13,14 @@ def send(String message) {
                 return response
         }
 }
+
+def success(String message, String appVersion, String commitRef, String appLink) {
+        send("""<strong>CI/CD Success</strong>
+-----------------------------
+<em>${message}</em>
+
+App Version: <pre>${appVersion}</pre>
+Commit: <pre>${commitRef}</pre>
+
+Link: <a href="${appLink}">${appLink}</a>""")
+}
