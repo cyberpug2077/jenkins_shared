@@ -1,4 +1,13 @@
-def send(String message) {
+package telegram.v1
+
+@CompileStatic
+class Client {
+
+    private static String formatStatus(boolean status) {
+        return status ? 'YES' : 'SKIP'
+    }
+
+    public String send(String message) {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
         withCredentials([usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
@@ -12,21 +21,19 @@ def send(String message) {
 
                 return response
         }
-}
+    }
 
-def _formatStatus(boolean status) {
-        return status ? 'YES' : 'SKIP'
-}
-
-def success(String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd) {
+    public String success(String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd) {
         return send("""<strong>CI/CD Success</strong>
 -----------------------------
 <em>${message}</em>
 
 App Version: <pre>${appVersion}</pre>
 Commit: <pre>${commitRef}</pre>
-CI: <pre>${_formatStatus(ci)}</pre>
-CD: <pre>${_formatStatus(cd)}</pre>
+CI: <pre>${formatStatus(ci)}</pre>
+CD: <pre>${formatStatus(cd)}</pre>
 
 Link: <a href="${appLink}">${appLink}</a>""")
+    }
+
 }
