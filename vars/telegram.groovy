@@ -14,13 +14,19 @@ def send(String message) {
         }
 }
 
-def success(String message, String appVersion, String commitRef, String appLink) {
+def _formatStatus(boolean status) {
+        return status ? 'YES' : 'SKIP'
+}
+
+def success(String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd) {
         return send("""<strong>CI/CD Success</strong>
 -----------------------------
 <em>${message}</em>
 
 App Version: <pre>${appVersion}</pre>
 Commit: <pre>${commitRef}</pre>
+CI: <pre>${_formatStatus(ci)}</pre>
+CD: <pre>${_formatStatus(cd)}</pre>
 
 Link: <a href="${appLink}">${appLink}</a>""")
 }
