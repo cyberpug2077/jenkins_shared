@@ -1,6 +1,5 @@
 package telegram.v1
 
-@CompileStatic
 class Client {
 
     private static String formatStatus(boolean status) {
