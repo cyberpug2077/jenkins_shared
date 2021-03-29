@@ -13,7 +13,7 @@ class Client implements Serializable {
     def send(String message) {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
-        steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
+        this.steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
                 TOKEN = steps.TOKEN
                 CHAT_ID = steps.CHAT_ID
                 response = steps.httpRequest (
@@ -29,7 +29,7 @@ class Client implements Serializable {
     }
 
     def success(args) {
-        return send("""<strong>CI/CD Success</strong>
+        return this.send("""<strong>CI/CD Success</strong>
 -----------------------------
 <em>${args.message}</em>
 
