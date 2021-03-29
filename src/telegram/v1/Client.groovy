@@ -13,7 +13,7 @@ class Client implements Serializable {
     def emojiStatus(success, ci = false, cd = false) {
         if (!success) return '❌'
 
-        msg = '✅'
+        def msg = '✅'
 
         if (!ci) {
             msg += ' ⏭️'
