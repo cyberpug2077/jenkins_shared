@@ -10,6 +10,23 @@ class Client implements Serializable {
         return status ? 'YES' : 'SKIP'
     }
 
+    def emojiStatus(success, ci = false, cd = false) {
+        if (!success) return '❌'
+
+        msg = '✅'
+
+        if (!ci) {
+            msg += ' ⏭️'
+            return msg
+        }
+
+        msg += ' 📦'
+
+        if (ci && cd) msg += ' 🖥️'
+
+        return msg
+    }
+
     def send(String message) {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
@@ -25,7 +42,7 @@ class Client implements Serializable {
     }
 
     def success(args) {
-        return this.send("""<strong>CI/CD Success</strong>
+        return this.send("""${emojiStatus(true, args.ci, args.cd)}<strong>CI/CD Success</strong>
 -----------------------------
 <em>${args.message}</em>
 
@@ -35,6 +52,13 @@ CI: <pre>${formatStatus(args.ci)}</pre>
 CD: <pre>${formatStatus(args.cd)}</pre>
 
 Link: <a href="${args.appLink}">${args.appLink}</a>""")
+    }
+
+    def fail(args) {
+        return this.send("""${emojiStatus(false)}<strong>CI/CD Fail</strong>
+-----------------------------
+
+<a href="${args.logLink}">Find the log here</a>""")
     }
 
 }
