@@ -2,15 +2,19 @@ package telegram.v1
 
 class Client {
 
-    private static String formatStatus(boolean status) {
+    def steps
+
+    Client(steps) { this.steps = steps }
+
+    def formatStatus(boolean status) {
         return status ? 'YES' : 'SKIP'
     }
 
-    public static String send(String message) {
+    def send(String message) {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
-        withCredentials([usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
-                response = httpRequest (
+        steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
+                response = steps.httpRequest (
                         consoleLogResponseBody: true,
                         contentType: 'APPLICATION_JSON',
                         httpMode: 'GET',
@@ -22,17 +26,18 @@ class Client {
         }
     }
 
-    public static String success(String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd) {
+    def success(args) {
+        //String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd
         return send("""<strong>CI/CD Success</strong>
 -----------------------------
-<em>${message}</em>
+<em>${args.message}</em>
 
-App Version: <pre>${appVersion}</pre>
-Commit: <pre>${commitRef}</pre>
-CI: <pre>${formatStatus(ci)}</pre>
-CD: <pre>${formatStatus(cd)}</pre>
+App Version: <pre>${args.appVersion}</pre>
+Commit: <pre>${args.commitRef}</pre>
+CI: <pre>${formatStatus(args.ci)}</pre>
+CD: <pre>${formatStatus(args.cd)}</pre>
 
-Link: <a href="${appLink}">${appLink}</a>""")
+Link: <a href="${args.appLink}">${args.appLink}</a>""")
     }
 
 }
