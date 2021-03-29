@@ -15,7 +15,7 @@ def send(String message) {
 }
 
 def success(String message, String appVersion, String commitRef, String appLink) {
-        send("""<strong>CI/CD Success</strong>
+        return send("""<strong>CI/CD Success</strong>
 -----------------------------
 <em>${message}</em>
 
