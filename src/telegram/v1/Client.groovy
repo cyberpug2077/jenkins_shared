@@ -42,7 +42,7 @@ class Client implements Serializable {
     }
 
     def success(args) {
-        return this.send("""${emojiStatus(true, args.ci, args.cd)}<strong>CI/CD Success</strong>
+        return this.send("""${emojiStatus(true, args.ci, args.cd)} <strong>CI/CD Success</strong>
 -----------------------------
 <em>${args.message}</em>
 
@@ -55,7 +55,7 @@ Link: <a href="${args.appLink}">${args.appLink}</a>""")
     }
 
     def fail(args) {
-        return this.send("""${emojiStatus(false)}<strong>CI/CD Fail</strong>
+        return this.send("""${emojiStatus(false)} <strong>CI/CD Fail</strong>
 -----------------------------
 
 <a href="${args.logLink}">Find the log here</a>""")
