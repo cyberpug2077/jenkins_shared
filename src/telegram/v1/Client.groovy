@@ -14,11 +14,11 @@ class Client implements Serializable {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
         this.steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
-                response = steps.httpRequest (
+                response = this.steps.httpRequest (
                         consoleLogResponseBody: true,
                         contentType: 'APPLICATION_JSON',
                         httpMode: 'GET',
-                        url: 'https://api.telegram.org/bot${TOKEN}/sendMessage?text=' + encodedMessage + '&chat_id=${CHAT_ID}&disable_web_page_preview=true',
+                        url: "https://api.telegram.org/bot${this.steps.env.TOKEN}/sendMessage?text=$encodedMessage&chat_id=${this.steps.env.CHAT_ID}&disable_web_page_preview=true",
                         validResponseCodes: '200'
                 )
 
