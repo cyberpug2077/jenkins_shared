@@ -14,11 +14,13 @@ class Client {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
 
         steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
+                TOKEN = steps.TOKEN
+                CHAT_ID = steps.CHAT_ID
                 response = steps.httpRequest (
                         consoleLogResponseBody: true,
                         contentType: 'APPLICATION_JSON',
                         httpMode: 'GET',
-                        url: "https://api.telegram.org/bot$TOKEN/sendMessage?text=$encodedMessage&chat_id=$CHAT_ID&disable_web_page_preview=true",
+                        url: "https://api.telegram.org/bot${TOKEN}/sendMessage?text=$encodedMessage&chat_id=$CHAT_ID&disable_web_page_preview=true",
                         validResponseCodes: '200'
                 )
 
@@ -27,7 +29,6 @@ class Client {
     }
 
     def success(args) {
-        //String message, String appVersion, String commitRef, String appLink, boolean ci, boolean cd
         return send("""<strong>CI/CD Success</strong>
 -----------------------------
 <em>${args.message}</em>
