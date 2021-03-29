@@ -1,6 +1,6 @@
 package telegram.v1
 
-class Client {
+class Client implements Serializable {
 
     def steps
 
@@ -12,31 +12,20 @@ class Client {
 
     def send(String message) {
         def encodedMessage = URLEncoder.encode(message, 'UTF-8')
-        def creds = steps.credentials('telegram_chat_credentials')
 
-        response = steps.httpRequest (
+        steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
+                TOKEN = steps.TOKEN
+                CHAT_ID = steps.CHAT_ID
+                response = steps.httpRequest (
                         consoleLogResponseBody: true,
                         contentType: 'APPLICATION_JSON',
                         httpMode: 'GET',
-                        url: "https://api.telegram.org/bot${creds.password}/sendMessage?text=$encodedMessage&chat_id=${creds.username}&disable_web_page_preview=true",
+                        url: "https://api.telegram.org/bot$TOKEN/sendMessage?text=$encodedMessage&chat_id=$CHAT_ID&disable_web_page_preview=true",
                         validResponseCodes: '200'
                 )
 
-        return response
-
-        // steps.withCredentials([steps.usernamePassword(credentialsId: 'telegram_chat_credentials', passwordVariable: 'TOKEN', usernameVariable: 'CHAT_ID')]) {
-        //         TOKEN = steps.TOKEN
-        //         CHAT_ID = steps.CHAT_ID
-        //         response = steps.httpRequest (
-        //                 consoleLogResponseBody: true,
-        //                 contentType: 'APPLICATION_JSON',
-        //                 httpMode: 'GET',
-        //                 url: "https://api.telegram.org/bot${TOKEN}/sendMessage?text=$encodedMessage&chat_id=$CHAT_ID&disable_web_page_preview=true",
-        //                 validResponseCodes: '200'
-        //         )
-
-    //         return response
-    // }
+            return response
+        }
     }
 
     def success(args) {
