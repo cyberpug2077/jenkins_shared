@@ -57,6 +57,7 @@ Link: <a href="${args.appLink}">${args.appLink}</a>""")
     def fail(args) {
         return this.send("""${emojiStatus(false)} <strong>CI/CD Fail</strong>
 -----------------------------
+<em>${args.message}</em>
 
 <a href="${args.logLink}">Find the log here</a>""")
     }
